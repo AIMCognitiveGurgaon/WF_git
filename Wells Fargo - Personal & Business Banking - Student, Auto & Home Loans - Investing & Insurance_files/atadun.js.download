@@ -1,0 +1,31 @@
+var ndURI = ndURI || '';
+var isNative = isNative || false;
+
+(function(ndURI, isNative) {
+    if(!isNative){
+        var origin = document.getElementById('origin');
+        if(ndURI === '' && origin && (origin.value === 'cob' || origin.value === 'mobilebrowser')) {
+            ndURI = 'https://connect.secure.wellsfargo.com/ATADUN/2.2/w/w-642409/sync/js/';
+        }
+        if(ndURI !== '') {
+            var baseUrl = ndURI;
+            (function(w,d,s,u,q,js,fjs,nds){
+                nds=w.ndsapi||(w.ndsapi={});nds.config={q:[],ready:function(cb){this.q.push(cb)}};
+                js=d.createElement(s);fjs=d.getElementsByTagName(s)[0];js.src=u;
+                fjs.parentNode.insertBefore(js,fjs);js.onload=function(){
+                    if (nds && nds.load) {
+                        nds.load(u);                        
+                    }
+                }
+            }(window,document,"script",baseUrl));
+            var nds = window.ndsapi;
+            nds.config.ready(function() {
+                // Set Placement as Login
+               nds.setPlacement('Login');
+
+               // Bind to the submit button on the page
+               nds.sendOnSubmit();
+            });
+        }
+    }
+} (ndURI, isNative));
